@@ -1,0 +1,63 @@
+Setting up
+----------
+
+Setting up gitolite after rpm-install can be done as
+follows.
+
+On the server:
+
+1)  run "su - gitolite" to get a login shell on the gitolite
+    user
+2)  run "gitolite setup -a admin ." where admin is your gitolite admin
+username.
+
+On whatever machine your key came from (maybe your
+workstation or another account on the same server):
+
+3)  run "git clone gitolite@<name.or.ip>:gitolite-admin" to
+    start adding users and repos.
+
+To upgrade from a pre 3.0 release, read:
+
+https://github.com/sitaramc/gitolite/blob/master/doc/g2incompat.mkd
+https://github.com/sitaramc/gitolite/blob/master/doc/g2migr.mkd
+https://github.com/sitaramc/gitolite/blob/master/doc/g2migr-example.mkd
+https://github.com/sitaramc/gitolite/blob/master/doc/install.mkd
+
+Your setup might be more complex than mine was and thus require more care
+and customization, backup everything before you start!
+
+The process I followed on my installation was as follows:
+
+1. su - gitolite
+2. git clone repositories/gitolite-admin.git
+3. su to root
+4. yum remove gitolite  : this will preserve your old .ssh/authorized keys.
+5. su - gitolite
+6. mv .gitolite.rc .gitolite.rc-old
+7. rm -rf repositories/gitolite-admin.git
+8. Checked documentation to make sure I didn't need to preset the new .rc. 
+I didn't, I have a very simple configuration.
+9. su to root
+10. yum install gitolite3
+11. su - gitolite
+12. gitolite setup -a admin
+13. cd to your gitolite admin
+14. gitolite push -f
+
+At this point, everything worked as expected.
+
+Quick Notes for admin operations
+--------------------------------
+
+To administer gitolite, make changes to the config file
+(conf/gitolite.conf) and/or the pubkeys (in subdirectory
+'keydir') in any gitolite-admin clone, then git add, git commit, and git
+push.
+
+ADDING REPOS: Do NOT add repos manually on the server.  Edit
+the config file to give *some* user access to the repo.
+When you push, an empty repo will be created on the server.
+
+ADDING USERS: copy their pubkey as keydir/<username>.pub,
+add it, commit and push.
