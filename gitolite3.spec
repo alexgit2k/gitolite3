@@ -7,8 +7,8 @@
 %endif
 
 Name:           gitolite3
-Version:        3.01
-Release:        2%{?dist}
+Version:        3.02
+Release:        1%{?dist}
 Summary:        Highly flexible server for git directory version tracker
 
 Group:          Applications/System
@@ -20,7 +20,7 @@ URL:            http://github.com/sitaramc/gitolite
 # tar -xzf sitaramc-gitolite-v3.01-0-g88b4c86.tar.gz
 # rm -rf sitaramc-gitolite-06b56f4/doc/
 # tar -czf sitaramc-gitolite-v3.01-0-g88b4c86-nodocs.tar.gz sitaramc-gitolite-06b56f4/
-Source0:        sitaramc-gitolite-v3.01-0-g88b4c86-nodocs.tar.gz
+Source0:        sitaramc-gitolite-v3.02-0-g8aba6ec-nodocs.tar.gz
 Source1:        gitolite3-README-fedora
 
 BuildArch:      noarch
@@ -48,7 +48,7 @@ elsewhere in the doc/ directory.
 
 
 %prep
-%setup -qn sitaramc-gitolite-06b56f4
+%setup -qn sitaramc-gitolite-eba8d03
 cp %{SOURCE1} .
 
 
@@ -102,6 +102,9 @@ exit 0
 
 
 %changelog
+* Mon May 21 2012 Jon Ciesla <limburgher@gmail.com> - 3.02-1
+- Latest upstream.
+
 * Tue May 15 2012 Jon Ciesla <limburgher@gmail.com> - 3.01-2
 - Added license file, fixed duplicate files, dropped defattr.
 - Dropped clean and buildroot.
