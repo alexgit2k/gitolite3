@@ -7,25 +7,17 @@
 %endif
 
 Name:           gitolite3
-Version:        3.03
-Release:        3%{?dist}
+Version:        3.04
+Release:        1%{?dist}
 Summary:        Highly flexible server for git directory version tracker
 
 Group:          Applications/System
-License:        GPLv2
+License:        GPLv2 and CC-BY-SA
 URL:            http://github.com/sitaramc/gitolite
-# The gitolite docs are licensed Creative Commons
-# Attribution-NonCommercial-ShareAlike 3.0 Unported License,
-# so we have to strip them from the tarball.
-# tar -xzf sitaramc-gitolite-v3.01-0-g88b4c86.tar.gz
-# rm -rf sitaramc-gitolite-06b56f4/doc/
-# tar -czf sitaramc-gitolite-v3.01-0-g88b4c86-nodocs.tar.gz sitaramc-gitolite-06b56f4/
-Source0:        sitaramc-gitolite-v3.03-0-g75387fd-nodocs.tar.gz
+Source0:        sitaramc-gitolite-v3.04-0-gaf437c3.tar.gz
 Source1:        gitolite3-README-fedora
 
 BuildArch:      noarch
-#BuildRequires:  perl(Text::Markdown)
-# We provide the module, but don't create a package/name space
 Provides:       perl(%{name}) = %{version}-%{release}
 Requires:       git
 Requires:       openssh-clients
@@ -48,18 +40,12 @@ elsewhere in the doc/ directory.
 
 
 %prep
-%setup -qn sitaramc-gitolite-b8bd7f5
+%setup -qn sitaramc-gitolite-84533d3
 cp %{SOURCE1} .
 
 
 %build
-## Format documentation
-#for F in doc/*.mkd
-#do
-#        perl -MText::Markdown >$(echo $F |sed s/.mkd/.html/) <$F \
-#                -e 'print Text::Markdown::markdown (join "", <>)'
-#done
-
+#This page intentionally left blank.
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -98,10 +84,13 @@ exit 0
 %attr(750,%{name},%{name}) %dir %{gitolite_homedir}
 %attr(750,%{name},%{name}) %dir %{gitolite_homedir}/.ssh
 %config(noreplace) %attr(640,%{name},%{name}) %{gitolite_homedir}/.ssh/authorized_keys
-%doc gitolite3-README-fedora COPYING
+%doc gitolite3-README-fedora COPYING README.txt CHANGELOG
 
 
 %changelog
+* Wed Jun 27 2012 Jon Ciesla <limburgher@gmail.com> - 3.04-1
+- Latest upstream, docs now includable.
+
 * Thu Jun 07 2012 Petr Pisar <ppisar@redhat.com> - 3.03-3
 - Perl 5.16 rebuild
 
