@@ -8,7 +8,7 @@
 
 Name:           gitolite3
 Version:        3.04
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Highly flexible server for git directory version tracker
 
 Group:          Applications/System
@@ -88,6 +88,9 @@ exit 0
 
 
 %changelog
+* Thu Jun 28 2012 Petr Pisar <ppisar@redhat.com> - 3.04-2
+- Perl 5.16 rebuild
+
 * Wed Jun 27 2012 Jon Ciesla <limburgher@gmail.com> - 3.04-1
 - Latest upstream, docs now includable.
 
