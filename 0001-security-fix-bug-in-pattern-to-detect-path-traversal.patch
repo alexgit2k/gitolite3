@@ -1,0 +1,113 @@
+From f636ce3ba3e340569b26d1e47b9d9b62dd8a3bf2 Mon Sep 17 00:00:00 2001
+From: Sitaram Chamarty <sitaram@atc.tcs.com>
+Date: Fri, 5 Oct 2012 07:19:59 +0530
+Subject: [PATCH] (security) fix bug in pattern to detect path traversal
+
+while we're about it, add the same check to some of the internal
+routines, so that commands can also be protected.
+
+finally, just to make sure we don't lose it again in some other fashion,
+add a few tests for path traversal...
+---
+ src/gitolite-shell            |  2 +-
+ src/lib/Gitolite/Conf/Load.pm | 15 ++++++++++++++-
+ t/0-me-first.t                | 19 ++++++++++++++++++-
+ 3 files changed, 33 insertions(+), 3 deletions(-)
+
+diff --git a/src/gitolite-shell b/src/gitolite-shell
+index 5d48cc9..4bbae48 100755
+--- a/src/gitolite-shell
++++ b/src/gitolite-shell
+@@ -168,7 +168,7 @@ sub sanity {
+     my $repo = shift;
+     _die "'$repo' contains bad characters" if $repo !~ $REPONAME_PATT;
+     _die "'$repo' ends with a '/'"         if $repo =~ m(/$);
+-    _die "'$repo' contains '..'"           if $repo =~ m(\.\.$);
++    _die "'$repo' contains '..'"           if $repo =~ m(\.\.);
+ }
+ 
+ # ----------------------------------------------------------------------
+diff --git a/src/lib/Gitolite/Conf/Load.pm b/src/lib/Gitolite/Conf/Load.pm
+index 4abfa90..0f76908 100644
+--- a/src/lib/Gitolite/Conf/Load.pm
++++ b/src/lib/Gitolite/Conf/Load.pm
+@@ -67,8 +67,9 @@ my $last_repo = '';
+ 
+ sub access {
+     my ( $repo, $user, $aa, $ref ) = @_;
+-    _die "invalid repo '$repo'" if not( $repo and $repo =~ $REPOPATT_PATT );
+     _die "invalid user '$user'" if not( $user and $user =~ $USERNAME_PATT );
++    sanity($repo);
++
+     my $deny_rules = option( $repo, 'deny-rules' );
+     load($repo);
+ 
+@@ -175,8 +176,18 @@ sub option {
+     return $ret->{$option};
+ }
+ 
++sub sanity {
++    my $repo = shift;
++
++    _die "invalid repo '$repo'" if not( $repo and $repo =~ $REPOPATT_PATT );
++    _die "'$repo' ends with a '/'" if $repo =~ m(/$);
++    _die "'$repo' contains '..'" if $repo =~ $REPONAME_PATT and $repo =~ m(\.\.);
++}
++
+ sub repo_missing {
+     my $repo = shift;
++    sanity($repo);
++
+     return not -d "$rc{GL_REPO_BASE}/$repo.git";
+ }
+ 
+@@ -400,6 +411,8 @@ sub generic_name {
+ 
+ sub creator {
+     my $repo = shift;
++    sanity($repo);
++
+     return ( $ENV{GL_USER} || '' ) if repo_missing($repo);
+     my $f       = "$rc{GL_REPO_BASE}/$repo.git/gl-creator";
+     my $creator = '';
+diff --git a/t/0-me-first.t b/t/0-me-first.t
+index dc8916b..22102ef 100755
+--- a/t/0-me-first.t
++++ b/t/0-me-first.t
+@@ -6,10 +6,12 @@ use warnings;
+ use lib "src/lib";
+ use Gitolite::Test;
+ 
++my $rb = `gitolite query-rc -n GL_REPO_BASE`;
++
+ # initial smoke tests
+ # ----------------------------------------------------------------------
+ 
+-try "plan 65";
++try "plan 73";
+ 
+ # basic push admin repo
+ confreset;confadd '
+@@ -75,4 +77,19 @@ try "
+     glt ls-remote u5 file:///cc/1;  ok;     perl s/TRACE.*//g; !/\\S/
+     glt ls-remote u5 file:///cc/2;  !ok;    /DENIED by fallthru/
+     glt ls-remote u6 file:///cc/2;  !ok;    /DENIED by fallthru/
++
++    # command
++    glt perms u4 -c cc/bar/baz/frob + READERS u2;
++                                    ok;     /Initialized empty .*cc/bar/baz/frob.git/
++
++    # path traversal
++    glt ls-remote u4 file:///cc/dd/../ee
++                                    !ok;    /FATAL: 'cc/dd/\\.\\./ee' contains '\\.\\.'/
++    glt ls-remote u5 file:///cc/../../../../../..$rb/gitolite-admin
++                                    !ok;    /FATAL: 'cc/../../../../../..$rb/gitolite-admin' contains '\\.\\.'/
++
++    glt perms u4 -c cc/bar/baz/../frob + READERS u2
++                                    !ok;    /FATAL: 'cc/bar/baz/\\.\\./frob' contains '\\.\\.'/
++
++
+ ";
+-- 
+1.7.11.4
+

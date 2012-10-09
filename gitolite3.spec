@@ -8,7 +8,7 @@
 
 Name:           gitolite3
 Version:        3.04
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        Highly flexible server for git directory version tracker
 
 Group:          Applications/System
@@ -16,6 +16,7 @@ License:        GPLv2 and CC-BY-SA
 URL:            http://github.com/sitaramc/gitolite
 Source0:        sitaramc-gitolite-v3.04-0-gaf437c3.tar.gz
 Source1:        gitolite3-README-fedora
+Patch0:         0001-security-fix-bug-in-pattern-to-detect-path-traversal.patch
 
 BuildArch:      noarch
 Provides:       perl(%{name}) = %{version}-%{release}
@@ -43,6 +44,7 @@ elsewhere in the doc/ directory.
 %setup -qn sitaramc-gitolite-84533d3
 cp %{SOURCE1} .
 
+%patch0 -p1
 
 %build
 #This page intentionally left blank.
@@ -88,6 +90,9 @@ exit 0
 
 
 %changelog
+* Tue Oct 09 2012 Jon Ciesla <limburgher@gmail.com> - 3.04-4
+- Patch for directory traversal bug.
+
 * Thu Jul 19 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 3.04-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_18_Mass_Rebuild
 
