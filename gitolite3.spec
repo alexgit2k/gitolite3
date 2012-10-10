@@ -7,6 +7,7 @@
 %endif
 
 Name:           gitolite3
+Epoch:          1
 Version:        3.1
 Release:        1%{?dist}
 Summary:        Highly flexible server for git directory version tracker
@@ -90,8 +91,8 @@ exit 0
 
 
 %changelog
-* Wed Oct 10 2012 Jon Ciesla <limburgher@gmail.com> - 3.1-1
-- 3.1
+* Wed Oct 10 2012 Jon Ciesla <limburgher@gmail.com> - 1:3.1-1
+- 3.1, rewuiring Epoch bump.
 
 * Tue Oct 09 2012 Jon Ciesla <limburgher@gmail.com> - 3.04-4
 - Patch for directory traversal bug.
