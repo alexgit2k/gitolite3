@@ -8,14 +8,14 @@
 
 Name:           gitolite3
 Epoch:          1
-Version:        3.1
+Version:        3.2
 Release:        1%{?dist}
 Summary:        Highly flexible server for git directory version tracker
 
 Group:          Applications/System
 License:        GPLv2 and CC-BY-SA
 URL:            http://github.com/sitaramc/gitolite
-Source0:        sitaramc-gitolite-v3.1-0-g51ab768.tar.gz
+Source0:        gitolite-3.2.tar.gz
 Source1:        gitolite3-README-fedora
 #Patch0:         0001-security-fix-bug-in-pattern-to-detect-path-traversal.patch
 
@@ -42,7 +42,7 @@ elsewhere in the doc/ directory.
 
 
 %prep
-%setup -qn sitaramc-gitolite-16c4bec
+%setup -qn gitolite-%{version}
 cp %{SOURCE1} .
 
 #%patch0 -p1
@@ -91,6 +91,9 @@ exit 0
 
 
 %changelog
+* Mon Nov 19 2012 Jon Ciesla <limburgher@gmail.com> - 1:3.2-1
+- Latest upstream.
+
 * Wed Oct 10 2012 Jon Ciesla <limburgher@gmail.com> - 1:3.1-1
 - 3.1, rewuiring Epoch bump.
 
