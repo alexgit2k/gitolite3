@@ -8,14 +8,14 @@
 
 Name:           gitolite3
 Epoch:          1
-Version:        3.4
+Version:        3.5
 Release:        1%{?dist}
 Summary:        Highly flexible server for git directory version tracker
 
 Group:          Applications/System
 License:        GPLv2 and CC-BY-SA
 URL:            http://github.com/sitaramc/gitolite
-Source0:        gitolite-3.4.tar.gz
+Source0:        gitolite-3.5.tar.gz
 Source1:        gitolite3-README-fedora
 #Patch0:         0001-security-fix-bug-in-pattern-to-detect-path-traversal.patch
 
@@ -91,6 +91,9 @@ exit 0
 
 
 %changelog
+* Mon Mar 25 2013 Jon Ciesla <limburgher@gmail.com> - 1:3.5-1
+- Latest upstream.
+
 * Tue Mar 05 2013 Jon Ciesla <limburgher@gmail.com> - 1:3.4-1
 - Latest upstream.
 
