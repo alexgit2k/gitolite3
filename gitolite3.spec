@@ -9,7 +9,7 @@
 Name:           gitolite3
 Epoch:          1
 Version:        3.5.2
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Highly flexible server for git directory version tracker
 
 Group:          Applications/System
@@ -91,6 +91,9 @@ exit 0
 
 
 %changelog
+* Sat Aug 03 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1:3.5.2-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_20_Mass_Rebuild
+
 * Wed Jul 17 2013 Petr Pisar <ppisar@redhat.com> - 1:3.5.2-2
 - Perl 5.18 rebuild
 
