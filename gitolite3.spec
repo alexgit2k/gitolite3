@@ -8,7 +8,7 @@
 
 Name:           gitolite3
 Epoch:          1
-Version:        3.5.3.1
+Version:        3.6
 Release:        1%{?dist}
 Summary:        Highly flexible server for git directory version tracker
 
@@ -91,6 +91,9 @@ exit 0
 
 
 %changelog
+* Mon May 12 2014 Jon Ciesla <limburgher@gmail.com> - 1:3.6-1
+- Latest upstream.
+
 * Wed Oct 23 2013 Jon Ciesla <limburgher@gmail.com> - 1:3.5.3.1-1
 - Latest upstream.
 
