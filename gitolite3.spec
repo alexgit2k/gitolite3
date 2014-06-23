@@ -8,8 +8,8 @@
 
 Name:           gitolite3
 Epoch:          1
-Version:        3.6
-Release:        2%{?dist}
+Version:        3.6.1
+Release:        1%{?dist}
 Summary:        Highly flexible server for git directory version tracker
 
 Group:          Applications/System
@@ -91,6 +91,9 @@ exit 0
 
 
 %changelog
+* Mon Jun 23 2014 Jon Ciesla <limburgher@gmail.com> - 1:3.6.1-1
+- Latest upstream.
+
 * Sat Jun 07 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1:3.6-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_21_Mass_Rebuild
 
