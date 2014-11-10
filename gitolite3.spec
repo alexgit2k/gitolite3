@@ -8,7 +8,7 @@
 
 Name:           gitolite3
 Epoch:          1
-Version:        3.6.1
+Version:        3.6.2
 Release:        1%{?dist}
 Summary:        Highly flexible server for git directory version tracker
 
@@ -87,10 +87,13 @@ exit 0
 %attr(750,%{name},%{name}) %dir %{gitolite_homedir}
 %attr(750,%{name},%{name}) %dir %{gitolite_homedir}/.ssh
 %config(noreplace) %attr(640,%{name},%{name}) %{gitolite_homedir}/.ssh/authorized_keys
-%doc gitolite3-README-fedora COPYING README.txt CHANGELOG
+%doc gitolite3-README-fedora COPYING README.markdown CHANGELOG
 
 
 %changelog
+* Mon Nov 10 2014 Jon Ciesla <limburgher@gmail.com> - 1:3.6.2-1
+- Latest upstream.
+
 * Mon Jun 23 2014 Jon Ciesla <limburgher@gmail.com> - 1:3.6.1-1
 - Latest upstream.
 
