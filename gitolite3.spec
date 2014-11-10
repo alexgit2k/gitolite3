@@ -94,6 +94,9 @@ exit 0
 * Mon Nov 10 2014 Jon Ciesla <limburgher@gmail.com> - 1:3.6.2-1
 - Latest upstream.
 
+* Tue Aug 26 2014 Jitka Plesnikova <jplesnik@redhat.com> - 1:3.6.1-2
+- Perl 5.20 rebuild
+
 * Mon Jun 23 2014 Jon Ciesla <limburgher@gmail.com> - 1:3.6.1-1
 - Latest upstream.
 
