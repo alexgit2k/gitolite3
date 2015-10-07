@@ -9,7 +9,7 @@
 Name:           gitolite3
 Epoch:          1
 Version:        3.6.3
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        Highly flexible server for git directory version tracker
 
 Group:          Applications/System
@@ -91,6 +91,11 @@ exit 0
 
 
 %changelog
+* Thu Oct 8 2015 François Cami <fcami@fedoraproject.org> - 1:3.6.3-4
+- Fix instructions in README.fedora:
+-  gitolite user => gitolite3 user
+-  switch setup from -a to -pk (ssh keys) 
+
 * Wed Jun 17 2015 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1:3.6.3-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_23_Mass_Rebuild
 

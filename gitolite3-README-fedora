@@ -1,20 +1,25 @@
 Setting up
 ----------
 
-Setting up gitolite after rpm-install can be done as
-follows.
+Setting up gitolite after rpm-install can be done as follows.
 
 On the server:
 
-1)  run "su - gitolite" to get a login shell on the gitolite
-    user
-2)  run "gitolite setup -a admin ." where admin is your gitolite admin
-username.
+0)  copy your admin user's ssh public key to /tmp/foo.pub
+     (change foo to your username)
+
+1)  run "su - gitolite3" to get a login shell on the gitolite user
+
+2)  run "cp /tmp/foo.pub ." (change foo to your username)
+
+3)  run "gitolite setup -pk ~/foo.pub" 
+
+4)  all done, exit the gitolite3 user shelll (CTRL+D).
 
 On whatever machine your key came from (maybe your
 workstation or another account on the same server):
 
-3)  run "git clone gitolite@<name.or.ip>:gitolite-admin" to
+5)  run "git clone gitolite3@<name.or.ip>:gitolite-admin" to
     start adding users and repos.
 
 To upgrade from a pre 3.0 release, read:
@@ -40,7 +45,7 @@ The process I followed on my installation was as follows:
 I didn't, I have a very simple configuration.
 9. su to root
 10. yum install gitolite3
-11. su - gitolite
+11. su - gitolite3
 12. gitolite setup -a admin
 13. cd to your gitolite admin
 14. gitolite push -f
@@ -61,3 +66,4 @@ When you push, an empty repo will be created on the server.
 
 ADDING USERS: copy their pubkey as keydir/<username>.pub,
 add it, commit and push.
+
