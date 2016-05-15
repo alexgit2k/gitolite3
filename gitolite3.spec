@@ -9,7 +9,7 @@
 Name:           gitolite3
 Epoch:          1
 Version:        3.6.5
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Highly flexible server for git directory version tracker
 
 Group:          Applications/System
@@ -91,6 +91,9 @@ exit 0
 
 
 %changelog
+* Sun May 15 2016 Jitka Plesnikova <jplesnik@redhat.com> - 1:3.6.5-3
+- Perl 5.24 rebuild
+
 * Mon Feb 22 2016 Jon Ciesla <limburgher@gmail.com> - 1:3.6.5-1
 - Latest upstream.
 
