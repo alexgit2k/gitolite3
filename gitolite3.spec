@@ -20,6 +20,7 @@ Source1:        gitolite3-README-fedora
 #Patch0:         0001-security-fix-bug-in-pattern-to-detect-path-traversal.patch
 
 BuildArch:      noarch
+BuildRequires:      perl-generators
 Provides:       perl(%{name}) = %{version}-%{release}
 Requires:       git
 Requires:       openssh-clients
