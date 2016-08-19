@@ -5,11 +5,14 @@
 %else
 %global gitolite_homedir %{_sharedstatedir}/%{name}
 %endif
+%global gitolite_sharedir %{_datadir}/%{name}
+%global gitolite_suexec_bin %{_localstatedir}/www/gitolite-bin
+%global apache_root %{_sysconfdir}/httpd
 
 Name:           gitolite3
 Epoch:          1
 Version:        3.6.5
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        Highly flexible server for git directory version tracker
 
 Group:          Applications/System
@@ -17,6 +20,11 @@ License:        GPLv2 and CC-BY-SA
 URL:            http://github.com/sitaramc/gitolite
 Source0:        https://github.com/sitaramc/gitolite/archive/v%{version}.tar.gz
 Source1:        gitolite3-README-fedora
+Source2:        gitolite.conf.inactive
+Source3:        gitolite-gitweb.conf.inactive
+Source4:        gitweb.conf.gitolite
+Source5:        gitolite-suexec-wrapper.sh
+Source6:        gitweb-suexec-wrapper.sh
 #Patch0:         0001-security-fix-bug-in-pattern-to-detect-path-traversal.patch
 
 BuildArch:      noarch
@@ -60,6 +68,8 @@ install -d $RPM_BUILD_ROOT%{gitolite_homedir}/.ssh
 install -d $RPM_BUILD_ROOT%{_bindir}
 install -d $RPM_BUILD_ROOT%{perl_vendorlib}
 install -d $RPM_BUILD_ROOT%{_datadir}/%{name}
+install -d $RPM_BUILD_ROOT%{gitolite_suexec_bin}
+install -d $RPM_BUILD_ROOT%{apache_root}/conf.d
 
 # Code
 cp -pr src/lib/Gitolite $RPM_BUILD_ROOT%{perl_vendorlib}
@@ -70,6 +80,26 @@ ln -s %{_datadir}/%{name}/gitolite $RPM_BUILD_ROOT%{_bindir}/gitolite
 # empty authorized_keys file
 touch $RPM_BUILD_ROOT%{gitolite_homedir}/.ssh/authorized_keys
 
+# Install suexec-scripts
+sed -e "s:@@GITOLITE_HOMEDIR@@:%{gitolite_homedir}:g
+	s:@@GITOLITE_SHELL@@:%{_datadir}/%{name}/gitolite-shell:g" %{SOURCE5} > gitolite-suexec-wrapper.sh
+sed -e "s:@@GITOLITE_HOMEDIR@@:%{gitolite_homedir}:g
+	s:@@GITWEB@@:%{_localstatedir}/www/git/gitweb.cgi:g" %{SOURCE6} > gitweb-suexec-wrapper.sh
+install -Dp -m 700 gitolite-suexec-wrapper.sh %{buildroot}/%{gitolite_suexec_bin}/
+install -Dp -m 700 gitweb-suexec-wrapper.sh %{buildroot}/%{gitolite_suexec_bin}/
+
+# Apache-Config
+sed -e "s:@@NAME@@:%{name}:g
+	s:@@GITOLITE_SUEXEC_BIN@@:%{gitolite_suexec_bin}:g" %{SOURCE2} > gitolite.conf.inactive
+sed -e "s:@@NAME@@:%{name}:g
+	s:@@GITOLITE_SUEXEC_BIN@@:%{gitolite_suexec_bin}:g" %{SOURCE3} > gitolite-gitweb.conf.inactive
+install -Dp -m 644 gitolite.conf.inactive %{buildroot}/%{apache_root}/conf.d/
+install -Dp -m 644 gitolite-gitweb.conf.inactive %{buildroot}/%{apache_root}/conf.d/
+
+# Gitweb-Gitolite-Config
+sed -e "s:@@GITOLITE_HOMEDIR@@:%{gitolite_homedir}:g
+	s:@@GITOLITE_SHAREDIR@@:%{gitolite_sharedir}:g" %{SOURCE4} > gitweb.conf.gitolite
+install -Dp -m 644 gitweb.conf.gitolite %{buildroot}/%{_sysconfdir}/
 
 %pre
 # Add "gitolite" user per https://fedoraproject.org/wiki/Packaging:UsersAndGroups
@@ -88,10 +118,21 @@ exit 0
 %attr(750,%{name},%{name}) %dir %{gitolite_homedir}
 %attr(750,%{name},%{name}) %dir %{gitolite_homedir}/.ssh
 %config(noreplace) %attr(640,%{name},%{name}) %{gitolite_homedir}/.ssh/authorized_keys
+%attr(755,%{name},%{name}) %dir %{gitolite_suexec_bin}
+%config(noreplace) %attr(700,%{name},%{name}) %{gitolite_suexec_bin}/gitolite-suexec-wrapper.sh
+%config(noreplace) %attr(700,%{name},%{name}) %{gitolite_suexec_bin}/gitweb-suexec-wrapper.sh
+%attr(755,root,root) %dir %{apache_root}/conf.d
+%config(noreplace) %attr(644,root,root) %{apache_root}/conf.d/gitolite.conf.inactive
+%config(noreplace) %attr(644,root,root) %{apache_root}/conf.d/gitolite-gitweb.conf.inactive
+%config(noreplace) %attr(644,root,root) %{_sysconfdir}/gitweb.conf.gitolite
 %doc gitolite3-README-fedora COPYING README.markdown CHANGELOG
 
 
 %changelog
+* Fri Aug 19 2016 Alex Pircher <Alexander_Pircher@yahoo.de> 1:3.6.5-4
+- Apache-configs and suEXEC-wrappers for HTTP(S) based authentication and
+  for usage in combination with GitWeb
+
 * Sun May 15 2016 Jitka Plesnikova <jplesnik@redhat.com> - 1:3.6.5-3
 - Perl 5.24 rebuild
 

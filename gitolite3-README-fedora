@@ -7,12 +7,15 @@ On the server:
 
 0)  copy your admin user's ssh public key to /tmp/foo.pub
      (change foo to your username)
+    see point 3) if you want to use HTTP(S) based authentication only
 
 1)  run "su - gitolite3" to get a login shell on the gitolite user
 
 2)  run "cp /tmp/foo.pub ." (change foo to your username)
 
 3)  run "gitolite setup -pk ~/foo.pub" 
+    if you use gitolite only via HTTP(S) based authentication then run
+    setup instead with "gitolite setup -a AdminName"
 
 4)  all done, exit the gitolite3 user shelll (CTRL+D).
 
@@ -51,6 +54,26 @@ I didn't, I have a very simple configuration.
 14. gitolite push -f
 
 At this point, everything worked as expected.
+
+Gitolite via HTTP(S)
+-------------------
+
+If you want to access Gitolite via HTTP(S) use the apache-configuration at
+/etc/httpd/conf.d/gitolite.conf.inactive
+Note: An authentication-method must be added.
+
+When you get the error-message "FATAL: errors found but logfile could not be
+created" then you have to setup gitolite first with:
+"sudo -u gitolite3 gitolite setup -a AdminName"
+
+Gitolite and GitWeb
+-------------------
+
+If you want to access Gitweb and Gitolite via HTTP(S) use the apache-
+configuration at /etc/httpd/conf.d/gitolite-gitweb.conf.inactive
+Note: An authentication-method must be added.
+For the gitweb-configuration use /etc/gitweb.conf.gitolite instead
+of /etc/gitweb.conf
 
 Quick Notes for admin operations
 --------------------------------

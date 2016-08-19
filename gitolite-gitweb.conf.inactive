@@ -1,0 +1,17 @@
+# SuExec
+SuexecUserGroup @@NAME@@ @@NAME@@
+
+# Gitweb (at /git/)
+RedirectMatch /git$ /git/
+Alias /git/static /var/www/git/static
+ScriptAliasMatch ^/git/?$ @@GITOLITE_SUEXEC_BIN@@/gitweb-suexec-wrapper.sh
+
+# Gitolite (/git/*)
+ScriptAliasMatch /git/(.+) @@GITOLITE_SUEXEC_BIN@@/gitolite-suexec-wrapper.sh/$1
+
+#<Location /git>
+#    AuthType Basic
+#    AuthName "Git Access"
+#    Require valid-user
+#    AuthUserFile /etc/httpd/git.passwd
+#</Location>
